@@ -1,5 +1,4 @@
 """API routes for database explorer — view all tables and data."""
-import json
 from fastapi import APIRouter, Query
 from ..repositories.base import get_db
 from ..logger import get_logger

@@ -5,17 +5,17 @@ import time
 from ..state import ARIAState
 from ..context import get_queue, check_pause_and_abort
 
-async def _emit(event: dict):
-    queue = get_queue()
-    if queue:
-        await queue.put(event)
-
 import json
 from langchain_core.messages import HumanMessage, SystemMessage
 from ...llm import get_llm
 from ...logger import get_logger
 
 logger = get_logger(__name__)
+
+async def _emit(event: dict):
+    queue = get_queue()
+    if queue:
+        await queue.put(event)
 
 async def debate_system_node(state: ARIAState) -> dict:
     """Simulate a multi-agent debate to challenge hypotheses."""
@@ -61,7 +61,8 @@ async def debate_system_node(state: ARIAState) -> dict:
     try:
         data = json.loads(response.content)
         debate_log = data.get("debate_log", [])
-        if isinstance(data, list): debate_log = data
+        if isinstance(data, list):
+            debate_log = data
     except Exception as e:
         logger.error(f"Failed to parse Debate System JSON: {e}")
         debate_log = []

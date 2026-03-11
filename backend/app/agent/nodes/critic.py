@@ -16,16 +16,15 @@ from ...logger import get_logger
 logger = get_logger(__name__)
 
 
+
 async def _emit(event: dict):
     queue = get_queue()
     if queue:
         await queue.put(event)
 
-
 async def critic_node(state: ARIAState) -> dict:
     """Advanced quality audit: Confidence scoring & uncertainty estimation."""
     await check_pause_and_abort(state.get("run_id"))
-    goal = state["goal"]
     report = state.get("final_output", "")
     reasoning = state.get("reasoning_output", {})
     evidence = state.get("extracted_evidence", [])

@@ -3,6 +3,7 @@ Synthesizer Node — Combines research findings and reasoning output into a poli
 Streams tokens via SSE. Uses reasoning conclusions for higher-quality synthesis.
 """
 import time
+import json
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from ..state import ARIAState
@@ -18,9 +19,6 @@ async def _emit(event: dict):
     if queue:
         await queue.put(event)
 
-
-import json
-
 async def synthesizer_node(state: ARIAState) -> dict:
     """Advanced synthesis: Generate research-grade report."""
     await check_pause_and_abort(state.get("run_id"))
@@ -28,7 +26,6 @@ async def synthesizer_node(state: ARIAState) -> dict:
     mode = state.get("mode", "fast")
     evidence = state.get("extracted_evidence", [])
     kg = state.get("knowledge_graph", [])
-    hypotheses = state.get("hypotheses", [])
     debate_log = state.get("debate_log", [])
     reasoning = state.get("reasoning_output", {})
     start_time = time.time()

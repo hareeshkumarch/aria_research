@@ -20,11 +20,6 @@ from ...cache import get_cached, set_cached, LLM_CACHE_TTL
 logger = get_logger(__name__)
 
 
-async def _emit(event: dict):
-    queue = get_queue()
-    if queue:
-        await queue.put(event)
-
 
 def _parse_subtasks(text: str, max_tasks: int = 5) -> list[dict]:
     """Robustly parse subtasks JSON from LLM response."""
@@ -71,6 +66,11 @@ def _parse_subtasks(text: str, max_tasks: int = 5) -> list[dict]:
     # Fallback: create a single subtask from the goal
     return fallback
 
+
+async def _emit(event: dict):
+    queue = get_queue()
+    if queue:
+        await queue.put(event)
 
 async def planner_node(state: ARIAState) -> dict:
     """Plan subtasks — uses goal analysis + memory, then LLM for decomposition."""

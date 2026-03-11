@@ -12,11 +12,11 @@ from ..context import get_queue, check_pause_and_abort
 from ...llm import get_llm
 
 
+
 async def _emit(event: dict):
     queue = get_queue()
     if queue:
         await queue.put(event)
-
 
 async def goal_understanding_node(state: ARIAState) -> dict:
     """Parse the user's goal into structured components."""

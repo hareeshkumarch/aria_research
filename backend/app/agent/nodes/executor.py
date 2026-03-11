@@ -17,11 +17,6 @@ from ...cache import get_cached, set_cached, SEARCH_CACHE_TTL
 logger = get_logger(__name__)
 
 
-async def _emit(event: dict):
-    queue = get_queue()
-    if queue:
-        await queue.put(event)
-
 
 async def _execute_tool(tool_name: str, subtask: dict, run_id: str) -> tuple[str, int]:
     """Execute a tool with the appropriate arguments."""
@@ -187,6 +182,11 @@ async def _execute_single_subtask(task_idx: int, subtask: dict, run_id: str) -> 
     tool_result_str = f"## {subtask['title']}\n\n{result}"
     return task_idx, updated, tool_result_str
 
+
+async def _emit(event: dict):
+    queue = get_queue()
+    if queue:
+        await queue.put(event)
 
 async def executor_node(state: ARIAState) -> dict:
     """Execute next ready subtasks concurrently."""

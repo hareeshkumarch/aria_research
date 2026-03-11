@@ -5,17 +5,17 @@ import time
 from ..state import ARIAState
 from ..context import get_queue, check_pause_and_abort
 
-async def _emit(event: dict):
-    queue = get_queue()
-    if queue:
-        await queue.put(event)
-
 import json
 from langchain_core.messages import HumanMessage, SystemMessage
 from ...llm import get_llm
 from ...logger import get_logger
 
 logger = get_logger(__name__)
+
+async def _emit(event: dict):
+    queue = get_queue()
+    if queue:
+        await queue.put(event)
 
 async def evidence_extractor_node(state: ARIAState) -> dict:
     """Extract atomic facts and evidence from research results."""
@@ -64,7 +64,7 @@ async def evidence_extractor_node(state: ARIAState) -> dict:
         '}'
     ))
 
-    human = HumanMessage(content=f"Raw Research Data:\n\n" + "\n---\n".join(raw_data))
+    human = HumanMessage(content="Raw Research Data:\n\n" + "\n---\n".join(raw_data))
 
     response = await llm.ainvoke([system, human])
     

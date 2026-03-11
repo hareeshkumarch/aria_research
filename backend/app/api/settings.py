@@ -1,5 +1,4 @@
 """Settings API — manage LLM provider, model, and API keys at runtime."""
-import asyncio
 from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import Optional

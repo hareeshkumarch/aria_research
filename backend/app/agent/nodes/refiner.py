@@ -17,11 +17,11 @@ from ...config import settings
 logger = get_logger(__name__)
 
 
+
 async def _emit(event: dict):
     queue = get_queue()
     if queue:
         await queue.put(event)
-
 
 async def refiner_node(state: ARIAState) -> dict:
     """

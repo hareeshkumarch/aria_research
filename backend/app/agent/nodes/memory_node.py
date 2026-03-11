@@ -8,11 +8,11 @@ from ..context import get_queue, check_pause_and_abort
 from ...memory.chroma import memory_service
 
 
+
 async def _emit(event: dict):
     queue = get_queue()
     if queue:
         await queue.put(event)
-
 
 async def memory_node(state: ARIAState) -> dict:
     """Store completed subtask results in ChromaDB."""

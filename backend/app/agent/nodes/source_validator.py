@@ -5,17 +5,17 @@ import time
 from ..state import ARIAState
 from ..context import get_queue, check_pause_and_abort
 
-async def _emit(event: dict):
-    queue = get_queue()
-    if queue:
-        await queue.put(event)
-
 import json
 from langchain_core.messages import HumanMessage, SystemMessage
 from ...llm import get_llm
 from ...logger import get_logger
 
 logger = get_logger(__name__)
+
+async def _emit(event: dict):
+    queue = get_queue()
+    if queue:
+        await queue.put(event)
 
 async def source_validator_node(state: ARIAState) -> dict:
     """Evaluate and score the credibility of discovered sources."""
@@ -65,7 +65,7 @@ async def source_validator_node(state: ARIAState) -> dict:
         '}'
     ))
 
-    human = HumanMessage(content=f"Search Results:\n\n" + "\n---\n".join(search_data))
+    human = HumanMessage(content="Search Results:\n\n" + "\n---\n".join(search_data))
 
     response = await llm.ainvoke([system, human])
     

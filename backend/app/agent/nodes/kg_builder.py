@@ -5,17 +5,17 @@ import time
 from ..state import ARIAState
 from ..context import get_queue, check_pause_and_abort
 
-async def _emit(event: dict):
-    queue = get_queue()
-    if queue:
-        await queue.put(event)
-
 import json
 from langchain_core.messages import HumanMessage, SystemMessage
 from ...llm import get_llm
 from ...logger import get_logger
 
 logger = get_logger(__name__)
+
+async def _emit(event: dict):
+    queue = get_queue()
+    if queue:
+        await queue.put(event)
 
 async def kg_builder_node(state: ARIAState) -> dict:
     """Build a knowledge graph from extracted evidence."""

@@ -5,17 +5,17 @@ import time
 from ..state import ARIAState
 from ..context import get_queue, check_pause_and_abort
 
-async def _emit(event: dict):
-    queue = get_queue()
-    if queue:
-        await queue.put(event)
-
 import json
 from langchain_core.messages import HumanMessage, SystemMessage
 from ...llm import get_llm
 from ...logger import get_logger
 
 logger = get_logger(__name__)
+
+async def _emit(event: dict):
+    queue = get_queue()
+    if queue:
+        await queue.put(event)
 
 async def hypothesis_generator_node(state: ARIAState) -> dict:
     """Generate potential answers and hypotheses based on evidence."""
@@ -60,7 +60,8 @@ async def hypothesis_generator_node(state: ARIAState) -> dict:
     try:
         data = json.loads(response.content)
         hypotheses = data.get("hypotheses", [])
-        if isinstance(data, list): hypotheses = data
+        if isinstance(data, list):
+            hypotheses = data
     except Exception as e:
         logger.error(f"Failed to parse Hypothesis Generator JSON: {e}")
         hypotheses = []
